@@ -64,3 +64,17 @@ Optional entries are parenthesized
     * Method: get
     * Header: {"Authorization": "Bearer ${access_token}"}
     * Response: [{"survivor": integer, "advocate": integer}]
+    
+### Chat
+
+* Send
+    * URL: /chat/send
+    * Method: post
+    * Header: {"Authorization": "Bearer ${access_token}"}
+    * Body: {"receiver": integer, "message": string}
+    
+* History
+    * URL: /chat/${user_id}
+    * Method: get
+    * Header: {"Authorization": "Bearer ${access_token}"}
+    * Response: [{"time": string, "sender_id": integer, "receiver_id": integer, "message": string}] ordered by "time"

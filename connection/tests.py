@@ -2,30 +2,15 @@ import json
 
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
 
 from connection.models import Connection
-from user.models import Advocate, CustomUser, Survivor
+from utility.test import UserTestCase
 
 
-class ConnectionTest(APITestCase):
-    survivor_attributes = {
-        'username': 'some_survivor',
-        'email': 'survivor@email.com',
-        'password': 'some password',
-        'device_token': 'ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]'
-    }
-
-    advocate_attributes = {
-        'username': 'some_advocate',
-        'email': 'advocate@email.com',
-        'password': 'some other password',
-        'device_token': 'ExponentPushToken[yyyyyyyyyyyyyyyyyyyyyy]'
-    }
-
+class ConnectionTest(UserTestCase):
     def setUp(self):
-        self.survivor_id = self.create_survivor(self.survivor_attributes)
-        self.advocate_id = self.create_advocate(self.advocate_attributes)
+        self.survivor_id = self.create_survivor()
+        self.advocate_id = self.create_advocate()
 
         self.set_token(self.survivor_attributes)
 
@@ -72,7 +57,7 @@ class ConnectionTest(APITestCase):
             'device_token': 'ExponentPushToken[zzzzzzzzzzzzzzzzzzzzzz]'
         }
 
-        self.create_advocate(advocate_attributes)
+        self.create_advocate()
         self.set_token(advocate_attributes)
 
         response = self.client.post(
@@ -99,38 +84,3 @@ class ConnectionTest(APITestCase):
 
         self.assertEqual(connection['survivor'], self.survivor_id)
         self.assertEqual(connection['advocate'], self.advocate_id)
-
-
-    def set_token(self, attributes):
-        response = self.client.post(
-            reverse('token-obtain-pair'),
-            data=json.dumps({
-                'username': attributes['username'],
-                'password': attributes['password']
-            }),
-            content_type='application/json'
-        )
-
-        self.client.credentials(
-            HTTP_AUTHORIZATION='Bearer ' + response.data['access']
-        )
-
-    def create_survivor(self, attributes):
-        user = CustomUser.objects.create_user(
-            username=attributes['username'],
-            email=attributes['email'],
-            password=attributes['password'],
-            device_token=attributes['device_token']
-        )
-
-        return Survivor.objects.create(user=user).user_id
-
-    def create_advocate(self, attributes):
-        user = CustomUser.objects.create_user(
-            username=attributes['username'],
-            email=attributes['email'],
-            password=attributes['password'],
-            device_token=attributes['device_token']
-        )
-
-        return Advocate.objects.create(user=user).user_id
