@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user.apps.UserConfig',
     'rest_framework',
+    'connection.apps.ConnectionConfig',
 ]
 
 # Customized user model

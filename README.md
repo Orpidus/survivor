@@ -44,3 +44,23 @@ Optional entries are parenthesized
     * Method: post
     * Body: {"refresh": ${refresh_token}}
     * Response: {"access": string}
+    
+### Connection
+
+* Request
+    * URL: /connection/request
+    * Method: post
+    * Header: {"Authorization": "Bearer ${access_token}"}
+    
+* Accept
+    * URL: /connection/accept
+    * Method: post
+    * Header: {"Authorization": "Bearer ${access_token}"}
+    * Body: {"survivor_id": integer}
+    * Response: Success: 200, Failure: 204
+
+* View
+    * URL: /connection
+    * Method: get
+    * Header: {"Authorization": "Bearer ${access_token}"}
+    * Response: [{"survivor": integer, "advocate": integer}]
