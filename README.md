@@ -78,3 +78,25 @@ Optional entries are parenthesized
     * Method: get
     * Header: {"Authorization": "Bearer ${access_token}"}
     * Response: [{"time": string, "sender_id": integer, "receiver_id": integer, "message": string}] ordered by "time"
+ 
+ ### Tasks
+
+* Assign
+    * URL: /task/${survivor_id}
+    * Method: post
+    * Header: {"Authorization": "Bearer ${access_token}"}
+    * Body: {"details": string}    
+    * Response: {"id": integer, "survivor": integer, "advocate": integer, "details": string, "status": string}
+
+* View
+    * URL: /task/${survivor_id}
+    * Method: get
+    * Header: {"Authorization": "Bearer ${access_token}"}
+    * Response: [{"id": integer, "survivor": integer, "advocate": integer, "details": string, "status": string}]
+
+* Update
+    * URL: /task/${user_id}
+    * Method: put
+    * Header: {"Authorization": "Bearer ${access_token}"}
+    * Body: {"task_id": integer, "status": string}
+    * Response: {"id": integer, "survivor": string, "advocate": string, "details": string, "status": string}

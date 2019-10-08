@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'connection.apps.ConnectionConfig',
     'chat.apps.ChatConfig',
+    'task.apps.TaskConfig'
 ]
 
 # Customized user model

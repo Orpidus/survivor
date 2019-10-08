@@ -8,5 +8,6 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token-obtain-pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
     path('connection/', include(('connection.urls', 'connection'), namespace='connection')),
-    path('chat/', include(('chat.urls', 'chat'), namespace='chat'))
+    path('chat/', include(('chat.urls', 'chat'), namespace='chat')),
+    path('task/', include(('task.urls', 'task'), namespace='task'))
 ]
