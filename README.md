@@ -56,6 +56,7 @@ Optional entries are parenthesized
 * Request
     * URL: /connection/request
     * Method: post
+    * Body: {Data to be passed to advocates}
     * Header: {"Authorization": "Bearer ${access_token}"}
     
 * Accept

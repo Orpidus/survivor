@@ -26,7 +26,7 @@ class RequestConnectionView(APIView):
     def post(self, request):
         connection = Connection.objects.create(survivor_id=request.user.user_token)
 
-        process = Process(target=request_advocates(connection_id=connection.id))
+        process = Process(target=request_advocates(connection_id=connection.id, data=request.data))
         process.start()
 
         return Response(connection.id, status.HTTP_200_OK)
@@ -79,13 +79,15 @@ class ListConnections(APIView):
         return Response(ConnectionSerializer(result, many=True).data, status=status.HTTP_200_OK)
 
 
-def request_advocates(connection_id):
+def request_advocates(connection_id, data):
     sleep_time = 30
 
     survivor_id = Connection.objects.get(id=connection_id).survivor_id
     survivor = Survivor.objects.get(user__user_token=survivor_id)
 
-    advocates = Advocate.objects.all()
+    case_type = data.get('case_type', 'police')
+
+    advocates = Advocate.objects.filter(type=case_type)
 
     for advocate in advocates:
         connection = Connection.objects.get(id=connection_id)
