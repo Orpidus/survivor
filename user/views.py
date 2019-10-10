@@ -36,7 +36,7 @@ class SurvivorRegisterView(APIView):
 class AdvocateRegisterView(APIView):
     def post(self, request):
         user = create_user(request=request)
-        advocate = Advocate.objects.create(user=user)
+        advocate = Advocate.objects.create(user=user, type=request.data.get('type', 'police'))
 
         return Response(AdvocateSerializer(advocate).data, status=status.HTTP_201_CREATED)
 

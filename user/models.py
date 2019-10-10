@@ -38,3 +38,8 @@ class Advocate(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
+
+    type = models.CharField(
+        max_length=64,
+        default='police',
+    )

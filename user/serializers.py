@@ -6,7 +6,7 @@ from user.models import CustomUser, Survivor, Advocate
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'password', 'user_token', 'device_token')
+        fields = '__all__'
 
     def create(self, validated_data):
         user = super(CustomUserSerializer, self).create(validated_data)
@@ -37,7 +37,7 @@ class SurvivorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Survivor
-        fields = ('user',)
+        fields = '__all__'
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -50,7 +50,7 @@ class AdvocateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Advocate
-        fields = ('user',)
+        fields = '__all__'
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

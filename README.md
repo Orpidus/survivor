@@ -7,11 +7,17 @@
 
 Optional entries are parenthesized
 
-* Register
-    * URL: /user[/survivor, /advocate]
+* Register survivors
+    * URL: /user/survivor
     * Method: post
     * Body: {"username": string, "email": string, "password": string, "user_token": string, ("device_token": string)}
     * Response: {"username": string, "email": string, "user_token": string, "device_token": string}
+
+* Register advocates
+    * URL: /user/advocate
+    * Method: post
+    * Body: {"username": string, "email": string, "password": string, "user_token": string, ("device_token": string), ("type": string)}
+    * Response: {"username": string, "email": string, "user_token": string, "device_token": string, "type": string}
 
 * View
     * URL: /user/${user_id}

@@ -78,6 +78,18 @@ class RegisterUserTest(UserTestCase):
         user = User.objects.get(user_token=response.data['user_token'])
         self.assertEqualAttributes(user, self.create_attributes)
 
+    def test_advocate(self):
+        response = self.client.post(
+            reverse('user:advocate-register'),
+            data=json.dumps({
+                **self.create_attributes,
+                'type': 'some type',
+            }),
+            content_type='application/json'
+        )
+
+        self.assertEqual(response.data['type'], 'some type')
+
     @parameterized.expand([('survivor',), ('advocate',)])
     def test_invalid_data(self, user_type):
         response = self.client.post(
