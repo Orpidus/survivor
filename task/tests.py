@@ -42,6 +42,7 @@ class TaskTest(UserTestCase):
             'username': 'some other advocate',
             'email': 'other_advocate@email.com',
             'password': 'some other password',
+            'user_token': '3',
             'device_token': 'ExponentPushToken[zzzzzzzzzzzzzzzzzzzzzz]'
         }
 

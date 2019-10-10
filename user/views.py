@@ -46,7 +46,7 @@ class UserIsOwnerOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        return view.kwargs['user_id'] == request.user.id
+        return view.kwargs['user_token'] == request.user.user_token
 
 
 class UserInformationView(APIView):
@@ -55,22 +55,22 @@ class UserInformationView(APIView):
         UserIsOwnerOrReadOnly,
     )
 
-    def get(self, request, user_id):
-        user = get_user(user_id)
+    def get(self, request, user_token):
+        user = get_user(user_token)
 
         if hasattr(user, 'survivor'):
-            survivor = Survivor.objects.get(user_id=user_id)
+            survivor = Survivor.objects.get(user=user)
             result = SurvivorSerializer(survivor)
         else:
-            advocate = Advocate.objects.get(user_id=user_id)
+            advocate = Advocate.objects.get(user=user)
             result = AdvocateSerializer(advocate)
 
         return Response(result.data, status=status.HTTP_200_OK)
 
-    def put(self, request, user_id):
+    def put(self, request, user_token):
         update_user(request.user, request=request)
 
-        user = get_user(user_id)
+        user = get_user(user_token)
 
         if hasattr(user, 'survivor'):
             serializer = SurvivorSerializer(user.survivor, request.data, partial=True)
@@ -85,8 +85,8 @@ class UserInformationView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def delete(self, request, user_id):
-        user = get_user(user_id)
+    def delete(self, request, user_token):
+        user = get_user(user_token)
 
         user.is_active = False
 
@@ -95,9 +95,9 @@ class UserInformationView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-def get_user(user_id):
+def get_user(user_token):
     try:
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(user_token=user_token)
 
         if user.is_active:
             return user

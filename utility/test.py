@@ -11,6 +11,7 @@ class UserTestCase(APITestCase):
         'username': 'some_survivor',
         'email': 'survivor@email.com',
         'password': 'some password',
+        'user_token': '1',
         'device_token': 'ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]'
     }
 
@@ -18,6 +19,7 @@ class UserTestCase(APITestCase):
         'username': 'some_advocate',
         'email': 'advocate@email.com',
         'password': 'some other password',
+        'user_token': '2',
         'device_token': 'ExponentPushToken[yyyyyyyyyyyyyyyyyyyyyy]'
     }
 
@@ -26,6 +28,7 @@ class UserTestCase(APITestCase):
             username=attributes['username'],
             email=attributes['email'],
             password=attributes['password'],
+            user_token=attributes['user_token'],
             device_token=attributes['device_token']
         )
 
@@ -37,7 +40,7 @@ class UserTestCase(APITestCase):
 
         user = self.create_user(attributes=attributes)
 
-        return Survivor.objects.create(user=user).user_id
+        return Survivor.objects.create(user=user).user.user_token
 
     def create_advocate(self, attributes=None):
         if not attributes:
@@ -45,7 +48,7 @@ class UserTestCase(APITestCase):
 
         user = self.create_user(attributes=attributes)
 
-        return Advocate.objects.create(user=user).user_id
+        return Advocate.objects.create(user=user).user.user_token
 
     def set_token(self, attributes):
         response = self.client.post(

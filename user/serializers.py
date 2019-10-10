@@ -6,7 +6,7 @@ from user.models import CustomUser, Survivor, Advocate
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'email', 'password', 'device_token')
+        fields = ('username', 'email', 'password', 'user_token', 'device_token')
 
     def create(self, validated_data):
         user = super(CustomUserSerializer, self).create(validated_data)
@@ -19,6 +19,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         instance.email = validated_data.get('email', instance.email)
         if 'password' in validated_data:
             instance.set_password(validated_data.get('password'))
+        instance.user_token = validated_data.get('user_token', instance.user_token)
         instance.device_token = validated_data.get('device_token', instance.device_token)
 
         instance.save()

@@ -14,7 +14,7 @@ from user.models import Advocate, Survivor
 
 class UserIsSurvivor(permissions.BasePermission):
     def has_permission(self, request, view):
-        return Survivor.objects.filter(user_id=request.user.id).exists()
+        return Survivor.objects.filter(user__user_token=request.user.user_token).exists()
 
 
 class RequestConnectionView(APIView):
@@ -24,7 +24,7 @@ class RequestConnectionView(APIView):
     )
 
     def post(self, request):
-        connection = Connection.objects.create(survivor_id=request.user.id)
+        connection = Connection.objects.create(survivor_id=request.user.user_token)
 
         process = Process(target=request_advocates(connection_id=connection.id))
         process.start()
@@ -34,7 +34,7 @@ class RequestConnectionView(APIView):
 
 class UserIsAdvocate(permissions.BasePermission):
     def has_permission(self, request, view):
-        return Advocate.objects.filter(user_id=request.user.id).exists()
+        return Advocate.objects.filter(user__user_token=request.user.user_token).exists()
 
 
 class AcceptConnectionView(APIView):
@@ -49,8 +49,8 @@ class AcceptConnectionView(APIView):
         if connection.advocate_id:
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
-            survivor = Survivor.objects.get(user_id=connection.survivor_id)
-            advocate = Advocate.objects.get(user_id=request.user.id)
+            survivor = Survivor.objects.get(user__user_token=connection.survivor_id)
+            advocate = Advocate.objects.get(user__user_token=request.user.user_token)
 
             connection.advocate_id = advocate.user_id
             connection.save()
@@ -74,7 +74,7 @@ class ListConnections(APIView):
         if hasattr(user, 'survivor'):
             result = Connection.objects.filter(survivor_id=user.user_token).exclude(advocate_id__isnull=True)
         else:
-            result = Connection.objects.filter(advocate_id=user.id)
+            result = Connection.objects.filter(advocate_id=user.user_token)
 
         return Response(ConnectionSerializer(result, many=True).data, status=status.HTTP_200_OK)
 

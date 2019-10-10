@@ -14,8 +14,8 @@ class UserIsConnected(permissions.BasePermission):
         sender = request.user
         receiver_id = request.data.get('receiver')
 
-        survivor_id = sender.id if hasattr(sender, 'survivor') else receiver_id
-        advocate_id = sender.id if hasattr(sender, 'advocate') else receiver_id
+        survivor_id = sender.user_token if hasattr(sender, 'survivor') else receiver_id
+        advocate_id = sender.user_token if hasattr(sender, 'advocate') else receiver_id
 
         return Connection.objects.filter(survivor_id=survivor_id, advocate_id=advocate_id).exists()
 
@@ -27,7 +27,7 @@ class SendMessageView(APIView):
     )
 
     def post(self, request):
-        data = {**request.data, **{'sender': request.user.id}}
+        data = {**request.data, **{'sender': request.user.user_token}}
         serializer = ChatSerializer(data=data)
 
         if serializer.is_valid():
@@ -47,7 +47,7 @@ class ChatHistoryView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, user_id):
-        this = request.user.id
+        this = request.user.user_token
         that = user_id
 
         sent = Chat.objects.filter(sender_id=this, receiver_id=that).order_by('time')

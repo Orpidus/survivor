@@ -17,6 +17,7 @@ class UsersManagersTests(TestCase):
     username = 'some_username'
     email = 'some@email.com'
     password = 'some password'
+    user_token = 'some user_token'
     device_token = 'some device_token'
 
     def test_create_user(self):
@@ -24,11 +25,13 @@ class UsersManagersTests(TestCase):
             username=self.username,
             email=self.email,
             password=self.password,
+            user_token=self.user_token,
             device_token=self.device_token
         )
 
         self.assertEqual(user.username, self.username)
         self.assertEqual(user.email, self.email)
+        self.assertEqual(user.user_token, self.user_token)
         self.assertEqual(user.device_token, self.device_token)
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_staff)
@@ -40,6 +43,7 @@ class UserTestCase(APITestCase):
         'username': 'some_username',
         'email': 'some@email.com',
         'password': 'some password',
+        'user_token': 'some user_token',
         'device_token': 'some device_token',
     }
 
@@ -47,6 +51,7 @@ class UserTestCase(APITestCase):
         'username': 'some_updated_username',
         'email': 'some_updated@email.com',
         'password': 'some updated password',
+        'user_token': 'some user_token',
         'device_token': 'some updated device_token',
     }
 
@@ -68,9 +73,9 @@ class RegisterUserTest(UserTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        self.assertTrue('id' in response.data)
+        self.assertTrue('user_token' in response.data)
 
-        user = User.objects.get(id=response.data['id'])
+        user = User.objects.get(user_token=response.data['user_token'])
         self.assertEqualAttributes(user, self.create_attributes)
 
     @parameterized.expand([('survivor',), ('advocate',)])
@@ -86,8 +91,8 @@ class RegisterUserTest(UserTestCase):
 
 class UserInformationTest(UserTestCase):
     def setUp(self):
-        self.user_id = self.create_user(self.create_attributes)
-        self.url = reverse('user:user-information', args=(self.user_id,))
+        self.user_token = self.create_user(self.create_attributes)
+        self.url = reverse('user:user-information', args=(self.user_token,))
         self.set_token(self.create_attributes)
 
     def test_user_from_id_absent(self):
@@ -98,10 +103,10 @@ class UserInformationTest(UserTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        user_id = response.data['id']
-        self.assertEqual(user_id, self.user_id)
+        user_token = response.data['user_token']
+        self.assertEqual(user_token, self.user_token)
 
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(user_token=user_token)
         self.assertEqualAttributes(user, self.create_attributes)
 
     def test_put(self):
@@ -113,16 +118,16 @@ class UserInformationTest(UserTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        user_id = response.data['id']
-        self.assertEqual(user_id, self.user_id)
+        user_token = response.data['user_token']
+        self.assertEqual(user_token, self.user_token)
 
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(user_token=user_token)
         self.assertEqualAttributes(user, self.update_attributes)
 
     def test_delete(self):
         response = self.client.delete(self.url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertFalse(User.objects.get(id=self.user_id).is_active)
+        self.assertFalse(User.objects.get(user_token=self.user_token).is_active)
 
         response = self.client.post(
             reverse('token-obtain-pair'),
@@ -149,7 +154,7 @@ class UserInformationTest(UserTestCase):
             content_type='application/json'
         )
 
-        return response.data['id']
+        return response.data['user_token']
 
     def set_token(self, attributes):
         response = self.client.post(

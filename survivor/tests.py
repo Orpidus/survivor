@@ -10,6 +10,7 @@ class GenerateTokenTest(APITestCase):
         'username': 'some_username',
         'email': 'some@email.com',
         'password': 'some password',
+        'user_token': 'some user_token'
     }
 
     url = reverse('token-obtain-pair')
@@ -21,7 +22,7 @@ class GenerateTokenTest(APITestCase):
             content_type='application/json'
         )
 
-        self.user_id = response.data['id']
+        self.user_token = response.data['user_token']
 
     def test_device_token(self):
         response = self.client.post(

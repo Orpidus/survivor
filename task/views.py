@@ -14,9 +14,9 @@ class UserIsOwnerOrAdvocate(permissions.BasePermission):
     def has_permission(self, request, view):
         survivor_id = view.kwargs['survivor_id']
 
-        return request.user.id == survivor_id or Connection.objects.filter(
+        return request.user.user_token == survivor_id or Connection.objects.filter(
             survivor_id=survivor_id,
-            advocate_id=request.user.id
+            advocate_id=request.user.user_token
         ).exists()
 
 
@@ -28,14 +28,14 @@ class TaskView(APIView):
 
     def post(self, request, survivor_id):
         request.data['survivor'] = survivor_id
-        request.data['advocate'] = request.user.id
+        request.data['advocate'] = request.user.user_token
 
         serializer = TaskSerializer(data=request.data)
 
         if serializer.is_valid(raise_exception=True):
             task = serializer.save()
             send_push_message(
-                token=Survivor.objects.get(user_id=survivor_id).user.device_token,
+                token=Survivor.objects.get(user__user_token=survivor_id).user.device_token,
                 message='task',
                 data={'details': task.details}
             )

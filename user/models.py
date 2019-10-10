@@ -11,6 +11,11 @@ class CustomUser(AbstractUser):
         verbose_name='email address'
     )
 
+    user_token = models.CharField(
+        max_length=64,
+        primary_key=True,
+    )
+
     device_token = models.CharField(
         blank=True,
         max_length=64,

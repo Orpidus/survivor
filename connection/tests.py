@@ -54,10 +54,11 @@ class ConnectionTest(UserTestCase):
             'username': 'some other advocate',
             'email': 'other_advocate@email.com',
             'password': 'some other password',
+            'user_token': '3',
             'device_token': 'ExponentPushToken[zzzzzzzzzzzzzzzzzzzzzz]'
         }
 
-        self.create_advocate()
+        self.create_advocate(advocate_attributes)
         self.set_token(advocate_attributes)
 
         response = self.client.post(
