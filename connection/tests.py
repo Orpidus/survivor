@@ -85,3 +85,6 @@ class ConnectionTest(UserTestCase):
 
         self.assertEqual(connection['survivor'], self.survivor_id)
         self.assertEqual(connection['advocate'], self.advocate_id)
+        self.assertTrue('survivor_name' in connection)
+        self.assertTrue('advocate_name' in connection)
+        self.assertTrue('case_type' in connection)
