@@ -36,6 +36,7 @@ class SendMessageView(APIView):
             send_push_message(
                 token=chat.receiver.device_token,
                 message=message,
+                notification_type='message-received',
                 data=ChatSerializer(chat).data
             )
             return Response(status=status.HTTP_200_OK)

@@ -61,7 +61,12 @@ class AcceptConnectionView(APIView):
                 'advocate_name': advocate.user.first_name
             }
 
-            send_push_message(survivor.user.device_token, message=message, data=data)
+            send_push_message(
+                survivor.user.device_token,
+                message=message,
+                notification_type='connection-accepted',
+                data=data
+            )
 
             return Response(status=status.HTTP_200_OK)
 
@@ -104,6 +109,11 @@ def request_advocates(connection_id, data):
             **data
         }
 
-        send_push_message(advocate.user.device_token, message=message, data=data)
+        send_push_message(
+            advocate.user.device_token,
+            message=message,
+            notification_type='connection-requested',
+            data=data
+        )
 
         time.sleep(sleep_time)

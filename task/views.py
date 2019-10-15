@@ -37,6 +37,7 @@ class TaskView(APIView):
             send_push_message(
                 token=Survivor.objects.get(user__user_token=survivor_id).user.device_token,
                 message='task',
+                notification_type='task-assigned',
                 data={'details': task.details}
             )
             return Response(TaskSerializer(task).data, status=status.HTTP_201_CREATED)
