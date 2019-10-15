@@ -57,7 +57,8 @@ class AcceptConnectionView(APIView):
 
             message = f'Advocate {advocate.user.first_name} has accepted your request to connect'
             data = {
-                'advocate_id': advocate.user_id
+                'advocate_id': advocate.user_id,
+                'advocate_name': advocate.user.first_name
             }
 
             send_push_message(survivor.user.device_token, message=message, data=data)
@@ -99,6 +100,7 @@ def request_advocates(connection_id, data):
         data = {
             'survivor_id': survivor_id,
             'connection_id': connection_id,
+            'survivor_name': survivor.user.first_name,
             **data
         }
 
