@@ -92,18 +92,18 @@ Optional entries are parenthesized
     * URL: /task/${survivor_id}
     * Method: post
     * Header: {"Authorization": "Bearer ${access_token}"}
-    * Body: {"details": string}    
-    * Response: {"id": integer, "survivor": string, "advocate": string, "details": string, "status": string}
+    * Body: {"details": string, ("deadline": string), ("type": string)}    
+    * Response: {"id": integer, "survivor": string, "advocate": string, "details": string, "status": string, "deadline": string, "type": string}
 
 * View
     * URL: /task/${survivor_id}
     * Method: get
     * Header: {"Authorization": "Bearer ${access_token}"}
-    * Response: [{"id": integer, "survivor": string, "advocate": string, "details": string, "status": string}]
+    * Response: [{"id": integer, "survivor": string, "advocate": string, "details": string, "status": string, "deadline": string, "type": string}]
 
 * Update
     * URL: /task/${user_id}
     * Method: put
     * Header: {"Authorization": "Bearer ${access_token}"}
-    * Body: {"task_id": integer, "status": string}
-    * Response: {"id": integer, "survivor": string, "advocate": string, "details": string, "status": string}
+    * Body: {"task_id": integer, ("status": string), ("deadline": string), ("type": string)}
+    * Response: {"id": integer, "survivor": string, "advocate": string, "details": string, "status": string, "deadline": string, "type": string}

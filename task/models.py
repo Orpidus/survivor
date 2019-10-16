@@ -19,5 +19,14 @@ class Task(models.Model):
 
     status = models.CharField(
         max_length=16,
-        default='created',
+        default='pending',
+    )
+
+    deadline = models.DateField(
+        null=True,
+    )
+
+    type = models.CharField(
+        max_length=64,
+        null=True,
     )

@@ -50,6 +50,8 @@ class TaskView(APIView):
         task = Task.objects.get(id=request.data.get('task_id'))
 
         task.status = request.data.get('status', task.status)
+        task.type = request.data.get('type', task.type)
+        task.deadline = request.data.get('deadline', task.deadline)
 
         task.save()
 

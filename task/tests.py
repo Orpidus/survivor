@@ -35,7 +35,7 @@ class TaskTest(UserTestCase):
         self.assertEqual(task['survivor'], self.survivor_id)
         self.assertEqual(task['advocate'], self.advocate_id)
         self.assertEqual(task['details'], details)
-        self.assertEqual(task['status'], 'created')
+        self.assertEqual(task['status'], 'pending')
 
     def test_unauthorized(self):
         advocate_attributes = {
