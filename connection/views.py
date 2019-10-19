@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from connection.models import Connection
 from connection.serializers import ConnectionSerializer
 from notification.exponent import send_push_message
+from task.models import Task
 from user.models import Advocate, Survivor
 
 
@@ -67,6 +68,11 @@ class AcceptConnectionView(APIView):
                 notification_type='connection-accepted',
                 data=data
             )
+
+            if 'task_id' in request.data:
+                task = Task.objects.get(id=request.data.get('task_id'))
+                task.advocate_id = request.user.user_token
+                task.save()
 
             return Response(status=status.HTTP_200_OK)
 
